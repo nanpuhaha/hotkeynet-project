@@ -18,7 +18,7 @@ from ....script import Hotkey, SendLabel, Key
 def build_actions_default(config: Config,
                           is_healer_target_focus: bool,
                           key: Key) -> typing.List[SendLabel]:
-    actions = list()
+    actions = []
 
     for talent in get_talent_by_category(category=TalentCategory.tank):
         sl = SendLabel(
@@ -41,16 +41,18 @@ def build_actions_default(config: Config,
         )
         actions.append(sl)
 
-    if is_healer_target_focus:
-        _actions = [
+    _actions = (
+        [
             act.Target.TARGET_FOCUS,
             key,
         ]
-    else:
-        _actions = [
+        if is_healer_target_focus
+        else [
             # act.Target.TARGET_FOCUS_TARGET,
             key,
         ]
+    )
+
     for talent in get_talent_by_category(category=TalentCategory.healer):
         sl = SendLabel(
             name=talent.name,
@@ -120,13 +122,12 @@ hk_3 = build_hk_3()
 def build_hk_4():
     actions = build_actions_default(
         config=config, is_healer_target_focus=False, key=Key(name=keyname.KEY_4))
-    hk = Hotkey(
+    return Hotkey(
         name="Key4",
         key=keyname.SCROLOCK_ON(keyname.KEY_4),
         actions=actions,
         script=script,
     )
-    return hk
 
 
 hk_4 = build_hk_4()
@@ -168,13 +169,12 @@ hk_5 = build_hk_5()
 def build_hk_6_one_time_debuff():
     actions = build_actions_default(
         config=config, is_healer_target_focus=True, key=Key(name=keyname.KEY_6))
-    hk = Hotkey(
+    return Hotkey(
         name="Key6",
         key=keyname.SCROLOCK_ON(keyname.KEY_6),
         actions=actions,
         script=script,
     )
-    return hk
 
 
 hk_6 = build_hk_6_one_time_debuff()
@@ -183,13 +183,12 @@ hk_6 = build_hk_6_one_time_debuff()
 def build_hk_7():
     actions = build_actions_default(
         config=config, is_healer_target_focus=True, key=Key(name=keyname.KEY_7))
-    hk = Hotkey(
+    return Hotkey(
         name="Key7",
         key=keyname.SCROLOCK_ON(keyname.KEY_7),
         actions=actions,
         script=script,
     )
-    return hk
 
 
 hk_7 = build_hk_7()
@@ -278,7 +277,7 @@ hk_0_short_term_buff = build_hk_0_short_term_buff()
 
 
 def build_hk_11_focus_mode_1():
-    actions = list()
+    actions = []
     for char in config.active_character_config.iter_by_window_index():
         if char.leader1_window_index:
             try:
@@ -315,7 +314,7 @@ hk_11_focus_mode_1 = build_hk_11_focus_mode_1()
 
 
 def build_hk_12_focus_mode_2():
-    actions = list()
+    actions = []
     for char in config.active_character_config.iter_by_window_index():
         # print(char.name, char.leader2_window_index)
         if char.leader2_window_index:
@@ -354,7 +353,7 @@ hk_12_focus_mode_2 = build_hk_12_focus_mode_2()
 
 # --- alt 1,2,3,4,5
 def build_hk_alt_5():
-    hk = Hotkey(
+    return Hotkey(
         name="Alt 5",
         key=keyname.SCROLOCK_ON(keyname.ALT_(keyname.KEY_5)),
         actions=[
@@ -364,7 +363,7 @@ def build_hk_alt_5():
                 actions=[
                     act.Target.TARGET_SELF,
                     act.Priest.HOLY_SPEC_CIRCLE_OF_HEALING,
-                ]
+                ],
             ),
             SendLabel(
                 name=TC.shaman.name,
@@ -372,12 +371,11 @@ def build_hk_alt_5():
                 actions=[
                     act.Target.TARGET_FOCUS_TARGET,
                     act.Shaman.ALL_SPEC_CHAIN_HEAL,
-                ]
-            )
+                ],
+            ),
         ],
         script=script,
     )
-    return hk
 
 
 hk_alt_5 = build_hk_alt_5()

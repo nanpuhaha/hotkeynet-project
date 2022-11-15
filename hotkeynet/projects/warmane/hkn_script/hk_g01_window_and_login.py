@@ -32,11 +32,14 @@ hk_launch_and_rename_game_client = build_hk_launch_and_rename_game_client()
 
 
 def build_hk_round_robin_toggle_window():
-    actions = list()
+    actions = []
     for index in config.toggle_window_config.round_robin_window_index:
         actions.append("<Toggle>")
         window_title = window_index[index].title
-        actions.append("    {}".format(cmd_g01_window_and_login.cmd_bring_window_to_foreground.call(window_title)))
+        actions.append(
+            f"    {cmd_g01_window_and_login.cmd_bring_window_to_foreground.call(window_title)}"
+        )
+
 
     return Hotkey(
         name="RoundRobinToggleWindow",
@@ -65,7 +68,7 @@ def build_hk_toggle_specific_window() -> typing.List[Hotkey]:
     ]
     TOGGLE_SPECIFIC_WINDOW_1_TO_25 = ctrl_f1_to_10 + shift_f5_to_f12 + shift_insert_to_pgdn
 
-    hk_list = list()
+    hk_list = []
     for key, index in zip(TOGGLE_SPECIFIC_WINDOW_1_TO_25, config.toggle_window_config.key1_to_25_window_index):
         window_title = window_index[index].title
         hk = Hotkey(
@@ -132,7 +135,7 @@ def build_hk_login_specific_account() -> typing.List[Hotkey]:
     ]
     HOTKEY_LIST_LOGIN_SPECIFIC_ACCOUNT_1_TO_25 = ctrl_alt_f1_to_10 + shift_alt_f5_to_f12 + shift_alt_insert_to_pgdn
 
-    hk_dict_view = dict()
+    hk_dict_view = {}
 
     # 对于 active_characters 中定义了的角色, 登录定义了的角色
     for char in config.active_character_config.active_characters:
@@ -169,11 +172,10 @@ def build_hk_login_specific_account() -> typing.List[Hotkey]:
             )
             hk_dict_view[ind] = hk
 
-    hk_list_view = list()
-    for ind in range(1, config.game_client_config.n_windows+1):
-        hk_list_view.append(hk_dict_view[ind])
-
-    return hk_list_view
+    return [
+        hk_dict_view[ind]
+        for ind in range(1, config.game_client_config.n_windows + 1)
+    ]
 
 hk_list_login_specific_account = build_hk_login_specific_account()
 

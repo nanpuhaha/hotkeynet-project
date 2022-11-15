@@ -22,18 +22,14 @@ def _has_send_focus_window(actions: typing.List[Action]) -> bool:
     :param actions:
     :return:
     """
-    for act in actions:
-        if isinstance(act, SendFocusWindow):
-            return True
-    return False
+    return any(isinstance(act, SendFocusWindow) for act in actions)
 
 
 def _add_send_focus_window_if_not_available(actions: typing.List[Action]) -> bool:
     if _has_send_focus_window(actions):
         return False
-    else:
-        actions.append(send_focus_window_trigger)
-        return True
+    actions.append(send_focus_window_trigger)
+    return True
 
 
 def litgoatdk_abcde_team_death_grip(config: 'Config', script: Script):

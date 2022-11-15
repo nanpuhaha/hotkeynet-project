@@ -6,6 +6,7 @@
 由于 Warmane 只允许最多 25 开, 所以逻辑上最多打开 25 个游戏客户端.
 """
 
+
 import typing
 
 import attr
@@ -18,9 +19,10 @@ class Window:
 
 
 window_list = [
-    Window(title="WoW{}".format(ind + 1), label="w{}".format( str(ind + 1).zfill(2)))
+    Window(title=f"WoW{ind + 1}", label=f"w{str(ind + 1).zfill(2)}")
     for ind in range(25)
-]  # type: typing.List[Window]
+]
+
 
 window_index = {
     ind + 1: window

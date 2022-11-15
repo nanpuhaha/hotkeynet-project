@@ -6,7 +6,6 @@ from pytest import raises, approx
 
 def test():
     import hotkeynet
-    pass
 
 
 if __name__ == "__main__":

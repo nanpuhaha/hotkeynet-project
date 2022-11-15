@@ -16,7 +16,7 @@ def remove_comments(content: str) -> str:
     """
     lines = content.split("\n")
 
-    lines_new = list()
+    lines_new = []
 
     for line in lines:
         line_striped = line.strip()
@@ -31,8 +31,7 @@ def remove_comments(content: str) -> str:
         line = line.split("//", 1)[0]
         lines_new.append(line)
 
-    new_content = "\n".join(lines_new)
-    return new_content
+    return "\n".join(lines_new)
 
 
 def remove_empty_line(content: str) -> str:
@@ -41,13 +40,8 @@ def remove_empty_line(content: str) -> str:
     """
     lines = content.split("\n")
 
-    lines_new = list()
-    for line in lines:
-        if line.strip():
-            lines_new.append(line)
-
-    new_content = "\n".join(lines_new)
-    return new_content
+    lines_new = [line for line in lines if line.strip()]
+    return "\n".join(lines_new)
 
 
 def remove_indent(content: str) -> str:
@@ -63,7 +57,7 @@ def remove_indent(content: str) -> str:
     and remove left whitespace cased by python script indentation.
     """
     lines = content.split("\n")[1:-1]
-    values = list()
+    values = []
     for line in lines:
         if line.strip():
             unindent = len(line) - len(line.lstrip())
@@ -77,18 +71,14 @@ def union_list(*lists) -> list:
     Union elements in all given lists.
     """
 
-    l = list(set.union(*[set(lst) for lst in lists]))
-    l.sort()
-    return l
+    return sorted(set.union(*[set(lst) for lst in lists]))
 
 
 def intersection_list(*lists) -> list:
     """
     Common elements in all given lists.
     """
-    l = list(set.intersection(*[set(lst) for lst in lists]))
-    l.sort()
-    return l
+    return sorted(set.intersection(*[set(lst) for lst in lists]))
 
 
 def difference_list(lst, *other_lsts) -> list:
@@ -98,12 +88,9 @@ def difference_list(lst, *other_lsts) -> list:
     st = set(lst)
     for l in other_lsts:
         st.difference_update(l)
-    l = list(st)
-    l.sort()
+    l = sorted(st)
     return l
 
 
 def set_to_list(st) -> list:
-    l = list(st)
-    l.sort()
-    return l
+    return sorted(st)

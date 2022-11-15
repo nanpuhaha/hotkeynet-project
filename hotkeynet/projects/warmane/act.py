@@ -20,9 +20,8 @@ from .constant.windows import window_index
 
 def convert_to_key_action(cls):
     for key, value in cls.__dict__.items():
-        if not key.startswith("_"):
-            if isinstance(value, str):
-                setattr(cls, key, Key(name=value))
+        if not key.startswith("_") and isinstance(value, str):
+            setattr(cls, key, Key(name=value))
 
 
 class Movement:

@@ -62,7 +62,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'hotkeynet'
-copyright = '%s, Sanhe Hu' % datetime.utcnow().year
+copyright = f'{datetime.utcnow().year}, Sanhe Hu'
 author = 'Sanhe Hu'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -198,7 +198,7 @@ except:
 try:
     from hotkeynet.docs import doc_data
 except:
-    doc_data = dict()
+    doc_data = {}
 
 jinja_contexts = {
     "doc_data": {
@@ -214,10 +214,10 @@ docfly.ApiReferenceDoc(
     conf_file=__file__,
     package_name=package_name,
     ignored_package=[
-        "%s.pkg" % package_name,
-        "%s.docs" % package_name,
-        "%s.tests" % package_name,
-    ]
+        f"{package_name}.pkg",
+        f"{package_name}.docs",
+        f"{package_name}.tests",
+    ],
 ).fly()
 
 

@@ -26,26 +26,23 @@ class Script:
     labels: OrderedDict = attr.ib(factory=OrderedDict)
         
     def add_command(self, command: 'Command', ignore_duplicate=False):
-        if command.name in self.commands:
-            if not ignore_duplicate:
-                raise ValueError(f"Duplicate command name found {command.name}")
+        if command.name in self.commands and not ignore_duplicate:
+            raise ValueError(f"Duplicate command name found {command.name}")
         self.commands[command.name] = command
 
     def add_template(self, template: 'Template', ignore_duplicate=False):
-        if template.name in self.templates:
-            if not ignore_duplicate:
-                raise ValueError(f"Duplicate template name found {template.name}")
+        if template.name in self.templates and not ignore_duplicate:
+            raise ValueError(f"Duplicate template name found {template.name}")
         self.templates[template.name] = template
 
     def add_hotkey(self, hotkey: 'Hotkey', ignore_duplicate=False):
-        if hotkey.key in self.hotkeys:
-            if not ignore_duplicate:
-                existing_hotkey = self.hotkeys[hotkey.key]
-                msg = (
-                    f"Hotkey(name={hotkey.name},key={hotkey.key}) cannot defined. "
-                    f"Another hotkey Hotkey(name={existing_hotkey.name},key={existing_hotkey.key}) already exists. "
-                )
-                raise ValueError(msg)
+        if hotkey.key in self.hotkeys and not ignore_duplicate:
+            existing_hotkey = self.hotkeys[hotkey.key]
+            msg = (
+                f"Hotkey(name={hotkey.name},key={hotkey.key}) cannot defined. "
+                f"Another hotkey Hotkey(name={existing_hotkey.name},key={existing_hotkey.key}) already exists. "
+            )
+            raise ValueError(msg)
         self.hotkeys[hotkey.key] = hotkey
 
     def dump(self, verbose=True):
@@ -77,10 +74,7 @@ class Command:
         :param args:
         :return:
         """
-        return "<{}{}>".format(
-            self.name,
-            " " + " ".join(args) if len(args) else ""
-        )
+        return f'<{self.name}{" " + " ".join(args) if len(args) else ""}>'
 
     def dump(self, verbose=True) -> str:
         """
@@ -130,10 +124,12 @@ class Hotkey:
 
     def get_send_label_by_name(self, name) -> 'SendLabel':
         if self._send_labels is None:
-            self._send_labels = dict()
-            for action in self.actions:
-                if isinstance(action, SendLabel):
-                    self._send_labels[action.name] = action
+            self._send_labels = {
+                action.name: action
+                for action in self.actions
+                if isinstance(action, SendLabel)
+            }
+
         return self._send_labels[name]
 
     def validate(self):
@@ -159,16 +155,11 @@ class Hotkey:
                 hotkey=self,
                 render_action=render_action,
             ))
-            if content.count("\n") == 0:
-                if verbose:
-                    print("    no action, skip")
-                return ""
-            else:
+            if content.count("\n") != 0:
                 return content
-        else:
-            if verbose:
-                print("    no action, skip")
-            return ""
+        if verbose:
+            print("    no action, skip")
+        return ""
 
 @attr.s
 class MovementHotkey(Hotkey):
@@ -241,11 +232,11 @@ class Mouse(Action):
     def dump(self) -> str:
         return "<ClickMouse {}>".format(
             "{button}{stroke}{target}{mode}{restore}".format(
-                button=(self.button + " ").lstrip(),
-                stroke=(self.stroke + " ").lstrip(),
-                target=(self.target + " ").lstrip(),
-                mode=(self.mode + " ").lstrip(),
-                restore=(self.restore + " ").lstrip(),
+                button=f"{self.button} ".lstrip(),
+                stroke=f"{self.stroke} ".lstrip(),
+                target=f"{self.target} ".lstrip(),
+                mode=f"{self.mode} ".lstrip(),
+                restore=f"{self.restore} ".lstrip(),
             ).strip()
         )
 
@@ -343,7 +334,7 @@ class SendFocusWindow(Action):
 
     @property
     def title(self) -> str:
-        return f"<SendFocusWin>"
+        return "<SendFocusWin>"
 
     def dump(self) -> str:
         if len(self.actions):

@@ -41,22 +41,18 @@ class ActiveCharacterConfig(BaseConfig):
         这个值的角色除外, 因为他本身就是 leader.
         """
         for ac in self.active_characters:
-            if ac.window_index != ind:
-                ac.leader1_window_index = ind
-            else:
-                ac.leader1_window_index = None
+            ac.leader1_window_index = ind if ac.window_index != ind else None
 
     def set_leader2_window_index(self, ind: int):
         for ac in self.active_characters:
-            if ac.window_index != ind:
-                ac.leader2_window_index = ind
-            else:
-                ac.leader2_window_index = None
+            ac.leader2_window_index = ind if ac.window_index != ind else None
 
     def validate_active_characters(self):
         """
         """
-        assert len(set([ac.window_index for ac in self.active_characters])) == len(self.active_characters)
+        assert len({ac.window_index for ac in self.active_characters}) == len(
+            self.active_characters
+        )
 
     def validate(self):
         self.validate_active_characters()

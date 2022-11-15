@@ -15,8 +15,10 @@ from ....script import (
 def build_hk_ctrl_1_6():
     return [
         Hotkey(
-            name="Ctrl {}".format(i),
-            key=keyname.SCROLOCK_ON(keyname.CTRL_(getattr(keyname, "KEY_{}".format(i)))),
+            name=f"Ctrl {i}",
+            key=keyname.SCROLOCK_ON(
+                keyname.CTRL_(getattr(keyname, f"KEY_{i}"))
+            ),
             actions=[
                 SendLabel(
                     name="all",
@@ -24,11 +26,12 @@ def build_hk_ctrl_1_6():
                     actions=[
                         act.Target.TARGET_FOCUS_TARGET,
                         act.General.TRIGGER,
-                    ]
+                    ],
                 )
             ],
             script=script,
-        ) for i in range(1, 6 + 1)
+        )
+        for i in range(1, 6 + 1)
     ]
 
 

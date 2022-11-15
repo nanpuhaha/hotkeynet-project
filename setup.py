@@ -132,7 +132,7 @@ if __name__ == "__main__":
         """
         Read requirements.txt, ignore comments
         """
-        requires = list()
+        requires = []
         f = open(path, "rb")
         for line in f.read().decode("utf-8").split("\n"):
             line = line.strip()
